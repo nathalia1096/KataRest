@@ -16,8 +16,11 @@ class GalleryTestCase(TestCase):
         user_model = User.objects.create_user(username='test', password='kd8wke-DE34', first_name='test',
                                               last_name='test',
                                               email='test@test.com')
+        user_model2 = User.objects.create_user(username='test2', password='kd8wke-DE34', first_name='test2',
+                                              last_name='test2',
+                                              email='test2@test.com')
         Portfolio.objects.create(user=user_model)
-        Portfolio.objects.create(user=user_model)
+        Portfolio.objects.create(user=user_model2)
 
         response = self.client.get('/gallery/getPortfolios/')
         current_data = json.loads(response.content)
