@@ -7,3 +7,7 @@ from .models import Image, Portfolio, UserProfile
 import json
 
 # Create your views here.
+@csrf_exempt
+def get_list_portfolios(request):
+    portfolios_list = []
+    return HttpResponse(serializers.serialize("json", portfolios_list))
