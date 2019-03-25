@@ -13,7 +13,8 @@ def get_list_portfolios(request):
     return HttpResponse(serializers.serialize("json", portfolios_list))
 
 @csrf_exempt
-def users(request):
+def users(request, id=None):
+    print("LLAMADA---------------------- +"+ request.method)
     if request.method == 'POST':
         json_user = json.loads(request.body)
         user_name = json_user['username']
@@ -26,6 +27,23 @@ def users(request):
         user_model.first_name = first_name
         user_model.last_name = last_name
         user_model.email = email
+        user_model.save()
+        return HttpResponse(serializers.serialize('json', [user_model]))
+    if request.method == 'PUT':
+        json_user = json.loads(request.body)
+        user_id = json_user['user_id']
+        user_name = json_user['username']
+        first_name = json_user['first_name']
+        last_name = json_user['last_name']
+        password = json_user['password']
+        email = json_user['email']
+
+        user_model = User.objects.get(pk=id)
+        user_model.username = user_name
+        user_model.password = password
+        user_model.email = email
+        user_model.first_name = first_name
+        user_model.last_name = last_name
         user_model.save()
 
         return HttpResponse(serializers.serialize('json', [user_model]))
