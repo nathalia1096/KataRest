@@ -39,3 +39,16 @@ class GalleryTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         currentData = json.loads(response.content)
         self.assertEqual(currentData[0]['fields']['username'], "test")
+
+    def test_ver_portafolio_publico(self):
+        user = User.objects.create_user(username='user', password='1234ABC', first_name='test',
+                                        last_name='test', email='test@uniandes.edu.co')
+        Image.objects.create(title='Test1', url='No', description='Test', type='jpg',
+                             user=user, isPublic=True)
+        Image.objects.create(title='Test2', url='No', description='Test2', type='jpg',
+                             user=user, isPublic=False)
+        url = '/gallery/users/' + str(user.id) + '/portafolio'
+        response = self.client.get(url, format='json')
+        current_data = json.loads(response.content)
+        self.assertEqual(len(current_data), 1)
+        self.assertEqual(current_data[0]['fields']['title'], 'Test1')
