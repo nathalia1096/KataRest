@@ -32,10 +32,10 @@ class GalleryTestCase(TestCase):
 
     def test_registrar_usuario(self):
         url = '/gallery/users/'
-        response = self.client.get(url, json.dumps(
-            {"user": "test", "first_name": "testx", "last_name": "xxtest", "password": "testxxx",
+        response = self.client.post(url, json.dumps(
+            {"username": "test", "first_name": "testx", "last_name": "xxtest", "password": "testxxx",
              "email": "test@test.com", "professionalProfile": "xxtest", "photo": "Test1"}),
                                     content_type='application/json')
         self.assertEqual(response.status_code, 200)
         currentData = json.loads(response.content)
-        self.assertEqual(currentData[0]['fields']['username'], "utest")
+        self.assertEqual(currentData[0]['fields']['username'], "test")
