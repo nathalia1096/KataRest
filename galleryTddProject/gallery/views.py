@@ -16,8 +16,6 @@ def get_list_portfolios(request):
 def users(request):
     if request.method == 'POST':
         json_user = json.loads(request.body)
-        print("JSON->");
-        print(json_user)
         user_name = json_user['username']
         first_name = json_user['first_name']
         last_name = json_user['last_name']
@@ -32,3 +30,8 @@ def users(request):
         user_model.save()
 
         return HttpResponse(serializers.serialize('json', [user_model]))
+
+@csrf_exempt
+def portafolio_usuario(request, id):
+    image_list = Image.objects.filter(user=id, isPublic=True)
+    return HttpResponse(serializers.serialize("json", image_list))
