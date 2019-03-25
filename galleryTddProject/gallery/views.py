@@ -22,7 +22,6 @@ def users(request):
         password = json_user['password']
         email = json_user['email']
 
-        print(user_name);
         user_model = User.objects.create_user(username=user_name, password=password)
         user_model.first_name = first_name
         user_model.last_name = last_name
@@ -35,3 +34,12 @@ def users(request):
 def portafolio_usuario(request, id):
     image_list = Image.objects.filter(user=id, isPublic=True)
     return HttpResponse(serializers.serialize("json", image_list))
+
+@csrf_exempt
+def login(request):
+    if request.method == 'POST':
+        json_user = json.loads(request.body)
+        username = json_user['username']
+        password = json_user['password']
+        user = User.objects.get(username=username, password=password)
+        return HttpResponse(serializers.serialize("json", [user]))
