@@ -62,3 +62,15 @@ class GalleryTestCase(TestCase):
         current_data = json.loads(response.content)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(current_data[0]['fields']['username'], 'user123')
+
+    def test_edicion_usuario(self):
+        user = User.objects.create_user(username='user123', password='1234ABC', first_name='test',
+                                        last_name='test', email='test@uniandes.edu.co')
+        url = '/gallery/users/' + str(user.id)
+
+        response = self.client.put(url, json.dumps({"username": "test", "first_name": "testx", "last_name": "xxtest", "password": "testxxx",
+             "email": "test@test.com"}), content_type='application/json')
+
+        current_data = json.loads(response.content)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(current_data[0]['fields']['username'], 'user123')
