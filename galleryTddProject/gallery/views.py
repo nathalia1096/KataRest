@@ -75,3 +75,22 @@ def modify_imageStatus(request):
             images_list.append(image_model)
 
     return HttpResponse(serializers.serialize("json", images_list))
+
+def add_image_portfolio(request, id):
+    if request.method == 'POST':
+        json_image = json.loads(request.body)
+        title = json_image['title']
+        url = json_image['url']
+        description = json_image['description']
+        type = json_image['type']
+        isPublic = json_image['isPublic']
+        portfolio_model = Portfolio.objects.filter(id=id).first()
+
+        image_model = Image.objects.create(title=title, url=url, description=description, type=type,
+                               isPublic=isPublic, user=portfolio_model.user, idPortfolio=portfolio_model)
+
+        image_model.save()
+        image_list = Image.objects.filter(idPortfolio=portfolio_model.id)
+
+    return HttpResponse(serializers.serialize("json", image_list))
+
