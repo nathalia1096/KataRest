@@ -61,3 +61,17 @@ def login(request):
         password = json_user['password']
         user = User.objects.get(username=username, password=password)
         return HttpResponse(serializers.serialize("json", [user]))
+
+@csrf_exempt
+def modify_imageStatus(request):
+    if request.method == 'PUT':
+        json_images = json.loads(request.body)
+        images = json_images['images']
+        images_list = []
+        for image in images:
+            image_model = Image.objects.filter(id=image['image_id']).first()
+            image_model.isPublic = image['isPublic']
+            image_model.save()
+            images_list.append(image_model)
+
+    return HttpResponse(serializers.serialize("json", images_list))
